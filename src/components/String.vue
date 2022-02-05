@@ -1,41 +1,26 @@
 <template>
-  <div class="string">
-    <div v-for="string of this.dataTable" :key="string">
-      <Cell :content="string.content" :order="string.order"/>
+  <div class="str">
+    <div v-for="(string,index) in this.dataString" :key="string.id" >
+      <Cell :content="string.content" :index="index" :header="header" :indexStr="indexStr"/>
     </div>
-    </div>
+  </div>
 </template>
 
 <script>
 import Cell from "@/components/Cell";
 
 export default {
-  name: 'Table',
+  name: 'String',
   components: {Cell},
-  data() {
-    return {
-      dataTable: [{
-        'order': 1,
-        'content': "firstBlock"
-      }, {'order': 2, 'content': "secondBlock"}]//массив из массивов строк
-    }
-  }
+  props: ['dataString','header','indexStr'],
 }
 </script>
 
 <style scoped>
-.string {
+.str {
   border: 2px solid black;
   height: 100%;
   display: flex;
   flex-flow: row;
-}
-
-ul {
-  list-style: none;
-  display: flex;
-  flex-flow: row;
-  margin: 0;
-  padding: 0;
 }
 </style>

@@ -14,16 +14,12 @@ import String from '../String'
 import ButtonAddDel from "@/components/ButtonAddDel";
 
 export default {
-  name: "Header",
+  name: "Table",
   components: {String, ButtonAddDel},
   inject: ['$socket'],
   data() {
     return {
       dataTable: ''
-      //     [[{
-      //   'id': 1,
-      //   'content': "firstBlock"
-      // }, {'id': 2, 'content': "secondBlock"}]]
     }
   },
   provide() {
@@ -88,7 +84,6 @@ export default {
     changeCell(indexString, indexColumn, content, flag) {
       this.dataTable[indexString][indexColumn].content = content;
       this.dataTable[indexString][indexColumn].id = Date.now() + Math.random();
-      console.log(this.dataTable);
       if (flag === true) {
         return;
       }
