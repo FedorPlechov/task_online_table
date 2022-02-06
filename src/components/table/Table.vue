@@ -9,7 +9,7 @@
           :quantityStrings="quantityStrings"></String>
     </div>
     <ButtonAddDel v-if="false" @click.native="deleteString">-</ButtonAddDel>
-    <ButtonAddDel @click.native="addString"> +</ButtonAddDel>
+    <ButtonAddDel class="button" @click.native="addString">+</ButtonAddDel>
   </div>
 </template>
 
@@ -165,5 +165,8 @@ export default {
 .order {
   padding: 5px;
   width: 2rem;
+}
+.button {
+  padding-left: 2.4rem;
 }
 </style>
