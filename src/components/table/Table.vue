@@ -2,7 +2,11 @@
   <div>
     <div v-for="(item,index) in dataTable" :key="item.order" class="container">
       <div class="order">{{ index === 0 ? '#' : index }}</div>
-      <String :dataString="item" :header="index===0" :indexStr="index"></String>
+      <String
+          :dataString="item"
+          :header="index===0"
+          :indexStr="index"
+          :quantityStrings="quantityStrings"></String>
     </div>
     <ButtonAddDel @click.native="deleteString">-</ButtonAddDel>
     <ButtonAddDel @click.native="addString"> +</ButtonAddDel>
@@ -26,7 +30,8 @@ export default {
     return {
       addColumn: this.addColumn,
       delColumn: this.deleteColumn,
-      changeCell: this.changeCell
+      changeCell: this.changeCell,
+      deleteCurrentString: this.deleteCurrentString
     }
   },
   computed: {
@@ -44,18 +49,14 @@ export default {
     addString({flag}) {
       const arr = [];
       this.renderNewString(arr)
-      if (flag===true) {
-        return;
-      }
+      if (flag===true) return;
       this.emitEventToServer('addStr', {
         indexNewStr: this.quantityStrings + 1, string: arr
       })
     },
-    deleteString({indexString, flag}) {
+    deleteString({ flag}) {
       this.dataTable.splice(-1, 1);
-      if (this.dataTable[indexString] === undefined && flag) {
-        return;
-      }
+      if (flag===true) return;
       this.emitEventToServer('deleteString', {
         indexString: this.quantityStrings
       })
@@ -67,18 +68,14 @@ export default {
         arr.push(obj);
         item.splice(index + 1, 0, obj);
       })
-      if (flag === true) {
-        return;
-      }
+      if (flag === true) return;
       this.emitEventToServer('addColumn', {
         arrayOfCell: arr, indexAddedColumn: index + 1
       })
     },
     deleteColumn(index, flag) {
       this.dataTable.forEach(item => item.splice(index, 1));
-      if (flag === true) {
-        return;
-      }
+      if (flag === true) return;
       this.emitEventToServer('deleteColumn', {
         indexDeletedColumn: index, quantityStrings: this.quantityStrings
       })
@@ -87,16 +84,20 @@ export default {
     changeCell(indexString, indexColumn, content, flag) {
       this.dataTable[indexString][indexColumn].content = content;
       this.dataTable[indexString][indexColumn].id = Date.now() + Math.random();
-      if (flag === true) {
-        return;
-      }
+      if (flag === true) return;
       this.emitEventToServer('changeCell', {
         indexString: indexString,
         indexColumn: indexColumn,
         content: content,
         id: this.dataTable[indexString][indexColumn].id
       })
-
+    },
+    deleteCurrentString({indexString,quantityStrings, flag}) {
+      this.dataTable.splice(indexString, 1);
+      if (flag === true) return;
+      this.emitEventToServer('deleteCurrentString', {
+        deletedIndexString:indexString, quantityStrings
+      })
     },
     async fetchData() {
       const response = await fetch("http://localhost:3000/table", {
@@ -146,6 +147,9 @@ export default {
     });
     this.$socket.on("changeCell", (payload) => {
       this.changeCell(payload.indexString, payload.indexColumn, payload.content, payload.flag)
+    });
+    this.$socket.on("deleteCurrentString", (payload) => {
+      this.deleteCurrentString(payload)
     });
 
   }

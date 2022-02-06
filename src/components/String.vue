@@ -1,8 +1,9 @@
 <template>
-  <div class="str">
+  <div class="str" ref="string">
     <div v-for="(string,index) in this.dataString" :key="string.id" >
       <Cell :content="string.content" :index="index" :header="header" :indexStr="indexStr"/>
     </div>
+    <Button class='del'  v-if="header===false" @click="deleteCurrentString({indexString:indexStr,quantityStrings})">del</Button>
   </div>
 </template>
 
@@ -12,7 +13,8 @@ import Cell from "@/components/Cell";
 export default {
   name: 'String',
   components: {Cell},
-  props: ['dataString','header','indexStr'],
+  props: ['dataString','header','indexStr','quantityStrings'],
+  inject:['deleteCurrentString']
 }
 </script>
 
@@ -22,5 +24,17 @@ export default {
   height: 100%;
   display: flex;
   flex-flow: row;
+  position: relative;
+}
+.del {
+  background: none;
+  border: none;
+  position: absolute;
+  right: -1.5rem;
+  top: 3px;
+}
+.del:hover {
+  color:red;
+  cursor: pointer;
 }
 </style>
