@@ -19,7 +19,7 @@ export default {
   inject: ['$socket'],
   data() {
     return {
-      dataTable: ''
+      dataTable: []
     }
   },
   provide() {
@@ -31,6 +31,9 @@ export default {
   },
   computed: {
     quantityColumns() {
+      if (this.dataTable[0]===undefined) {
+        return 1;
+      }
       return this.dataTable[0].length;
     },
     quantityStrings() {
@@ -38,10 +41,10 @@ export default {
     }
   },
   methods: {
-    addString({indexNewStr, flag}) {
+    addString({flag}) {
       const arr = [];
       this.renderNewString(arr)
-      if (this.dataTable[indexNewStr] === undefined && flag) {
+      if (flag===true) {
         return;
       }
       this.emitEventToServer('addStr', {
