@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div v-for="(item,index) in dataTable" :key="item.order" class="container">
+    <div v-for="(item,index) in dataTable" :key="index" class="container">
       <div class="order">{{ index === 0 ? '#' : index }}</div>
       <String
           :dataString="item"
@@ -8,7 +8,7 @@
           :indexStr="index"
           :quantityStrings="quantityStrings"></String>
     </div>
-    <ButtonAddDel @click.native="deleteString">-</ButtonAddDel>
+    <ButtonAddDel v-if="false" @click.native="deleteString">-</ButtonAddDel>
     <ButtonAddDel @click.native="addString"> +</ButtonAddDel>
   </div>
 </template>
